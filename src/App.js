@@ -1,19 +1,9 @@
 import { useState } from 'react';
 
-/*
-function Square({value, onSquareClick}) {
-  return (
-    <button className="square" onClick={onSquareClick}>
-      {value}
-    </button>
-  );
-}
-*/
-
 function Square({ value, onSquareClick, isWinning }) {
   return (
     <button
-      className={`square ${isWinning ? 'winning-square' :  ''} ${value === 'X' ? 'x-square' : ''}`}
+      className={`square ${value === 'X' ? 'x-square' : 'o-square'} ${isWinning ? 'winning-square' :  ''}`}
       onClick={onSquareClick}
     >
       {value}
@@ -88,10 +78,20 @@ export default function Game() {
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
-      description = "Go to move #" + move;
+      description = "Go to Move " + move;
     } else {
-      description = "Go to game start";
+      description = "Go to Game Start";
     }
+
+    // Check if it's the current move
+    if (move === currentMove) {
+      return (
+        <li key={move}>
+          <span>Move {move}</span>
+        </li>
+      );
+    }
+
     return (
       <li key={move}>
         <button onClick={() => jumpTo(move)}>{description}</button>
