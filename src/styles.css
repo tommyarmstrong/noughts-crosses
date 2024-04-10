@@ -57,6 +57,16 @@ body {
   padding: 0;
 }
 
+ol {
+  list-style: none; /* Remove default numbering */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+}
+
+ol li {
+  margin-bottom: 5px; /* Add some spacing between moves */
+}
+
 .square {
   background: #fff;
   border: 1px solid #999;
