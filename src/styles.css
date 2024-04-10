@@ -96,6 +96,10 @@ body {
   flex-direction: row; /* Stack items vertically */
 }
 
+.winning-square {
+  background-color: rgb(87, 230, 237); /* Change the background color to indicate winning squares */
+}
+
 /* Media query for mobile devices */
 @media (max-width: 768px) {
   .game-content {
