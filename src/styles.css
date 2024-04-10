@@ -98,7 +98,6 @@ body {
 
 .winning-square {
   background-color: rgb(223, 227, 227); /* Change the background color to indicate winning squares */
-  border: 1px solid black;
 }
 
 .x-square {
