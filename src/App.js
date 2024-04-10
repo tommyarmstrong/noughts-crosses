@@ -13,7 +13,7 @@ function Square({value, onSquareClick}) {
 function Square({ value, onSquareClick, isWinning }) {
   return (
     <button
-      className={`square ${isWinning ? 'winning-square' : ''}`}
+      className={`square ${isWinning ? 'winning-square' :  ''} ${value === 'X' ? 'x-square' : ''}`}
       onClick={onSquareClick}
     >
       {value}

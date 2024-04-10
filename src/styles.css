@@ -97,7 +97,16 @@ body {
 }
 
 .winning-square {
-  background-color: rgb(87, 230, 237); /* Change the background color to indicate winning squares */
+  background-color: rgb(223, 227, 227); /* Change the background color to indicate winning squares */
+  border: 1px solid black;
+}
+
+.x-square {
+  color: red; 
+}
+
+.o-square {
+  color: blue; 
 }
 
 /* Media query for mobile devices */
