@@ -11,7 +11,7 @@ function Square({value, onSquareClick}) {
 function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
     const nextSquares = squares.slice();
-    if(squares[i] || calculateWinner(squares)) {
+    if(squares[i] || calculateResult(squares)) {
       return;
     }
     if(xIsNext) { 
@@ -22,13 +22,18 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);  
   }
 
-  const winner = calculateWinner(squares);
+  const gameOutcome = calculateResult(squares);
+  const containsNull = squares.some(element => element === null);
   let status;
-  if(winner) {
-    status = "Winner: " + winner;
+  if(gameOutcome == "draw") {
+    status = "Game Drawn";
+  } else if (gameOutcome === "X" || gameOutcome === "O") {
+    status = "Winner: " + gameOutcome;
   } else {
-    status = "Next player: " + (xIsNext ? "X" : "O");
+    status = "Next Player: " + (xIsNext ? "X" : "O");
   }
+
+
 
   return (
     <>
@@ -98,7 +103,7 @@ export default function Game() {
   );
 }
 
-function calculateWinner(squares) {
+function calculateResult(squares) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -114,6 +119,10 @@ function calculateWinner(squares) {
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return squares[a];
     }
+  }
+  const containsNull = squares.some(element => element === null);
+  if (!containsNull) {
+    return "draw";
   }
   return null;
 }
