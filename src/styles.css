@@ -6,11 +6,12 @@ body {
   font-family: sans-serif;
   margin: 20px;
   padding: 0;
+  background-color: PowderBlue;
 }
 
 h1 {
   margin-top: 0;
-  font-size: 22px;
+  font-size: 32px;
 }
 
 h2 {
@@ -60,15 +61,16 @@ body {
   background: #fff;
   border: 1px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 85px;
   font-weight: bold;
   line-height: 34px;
-  height: 34px;
+  height: 90px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 90px;
+  color: blue;
 }
 
 .board-row:after {
@@ -87,4 +89,20 @@ body {
 
 .game-info {
   margin-left: 20px;
+}
+
+.game-content {
+  display: flex;
+  flex-direction: row; /* Stack items vertically */
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .game-content {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+  }
+  .h1 {
+    margin-top: 0;
+    font-size: 24px;
+  }
 }
