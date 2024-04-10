@@ -1,8 +1,21 @@
 import { useState } from 'react';
 
+/*
 function Square({value, onSquareClick}) {
   return (
     <button className="square" onClick={onSquareClick}>
+      {value}
+    </button>
+  );
+}
+*/
+
+function Square({ value, onSquareClick, isWinning }) {
+  return (
+    <button
+      className={`square ${isWinning ? 'winning-square' : ''}`}
+      onClick={onSquareClick}
+    >
       {value}
     </button>
   );
@@ -11,7 +24,7 @@ function Square({value, onSquareClick}) {
 function Board({ xIsNext, squares, onPlay }) {
   function handleClick(i) {
     const nextSquares = squares.slice();
-    if(squares[i] || calculateResult(squares)) {
+    if(squares[i] || calculateResult(squares).result) {
       return;
     }
     if(xIsNext) { 
@@ -22,18 +35,16 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);  
   }
 
-  const gameOutcome = calculateResult(squares);
-  const containsNull = squares.some(element => element === null);
+  const gameResult = calculateResult(squares).result;
+  const winningLine = calculateResult(squares).winningLine;
   let status;
-  if(gameOutcome == "draw") {
+  if(gameResult === "draw") {
     status = "Game Drawn";
-  } else if (gameOutcome === "X" || gameOutcome === "O") {
-    status = "Winner: " + gameOutcome;
+  } else if (gameResult === "X" || gameResult === "O") {
+    status = "Winner: " + gameResult;
   } else {
     status = "Next Player: " + (xIsNext ? "X" : "O");
   }
-
-
 
   return (
     <>
@@ -42,11 +53,13 @@ function Board({ xIsNext, squares, onPlay }) {
         <div className="board-row" key={rowIndex}>
           {Array(3).fill(null).map((_, colIndex) => {
             const squareIndex = rowIndex * 3 + colIndex;
+            const isWinning = winningLine && winningLine.includes(squareIndex);
             return (
               <Square 
                 key={squareIndex}
                 value={squares[squareIndex]}
                 onSquareClick={() => handleClick(squareIndex)}
+                isWinning={isWinning}
               />
             );
           })}
@@ -117,12 +130,16 @@ function calculateResult(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return { result: squares[a], winningLine: lines[i] };
     }
   }
+  // If there is no winner and no empty (null) squares then result = draw
   const containsNull = squares.some(element => element === null);
   if (!containsNull) {
+    const result = "draw";
+    const winningLine = null;
+    return { result: "draw", winningLine: null };
     return "draw";
   }
-  return null;
+  return { result: null, winningLine: null };
 }
