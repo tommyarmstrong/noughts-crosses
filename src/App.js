@@ -62,6 +62,7 @@ function Board({ xIsNext, squares, onPlay }) {
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove ] = useState(0);
+  const [showMoves, setShowMoves] = useState(false); 
   const xIsNext = currentMove % 2 === 0;
   const currentSquares = history[currentMove];
 
@@ -73,6 +74,12 @@ export default function Game() {
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove);
+  }
+
+  function restartGame() {
+    setHistory([Array(9).fill(null)]);
+    setCurrentMove(0);
+    setShowMoves(false);
   }
 
   const moves = history.map((squares, move) => {
@@ -106,9 +113,23 @@ export default function Game() {
         <div className="game-content">
           <div className="game-board">
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+            <button onClick={restartGame}>Restart Game</button>
+
           </div>
+
           <div className="game-info">
-            <ol>{moves}</ol>
+            <button onClick={() => setShowMoves(!showMoves)}>
+                {showMoves ? "Hide Moves" : "Show Moves"}
+              </button>
+              {showMoves && (
+                <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {moves.map((move, index) => (
+                    <li key={index} style={{ marginBottom: '5px' }}>
+                      {move}
+                    </li>
+                  ))}
+                </ol>
+              )}
           </div>
         </div>
       </div>
