@@ -30,7 +30,7 @@ function Board({ xIsNext, squares, onPlay }) {
   let status;
   if(gameResult === "draw") {
     status = "Game Drawn";
-  } else if (gameResult === "X" || gameResult === "O") {
+  } else if (gameResult) {
     status = "Winner: " + gameResult;
   } else {
     status = "Next Player: " + (xIsNext ? "X" : "O");
@@ -113,7 +113,6 @@ export default function Game() {
         <div className="game-content">
           <div className="game-board">
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-            
           </div>
           <div className="game-info">
             <button className="big-button" onClick={() => setShowMoves(!showMoves)}>

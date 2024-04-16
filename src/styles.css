@@ -124,6 +124,10 @@ ol li {
   background-color: rgb(223, 227, 227); /* Change the background color to indicate winning squares */
 }
 
+.latest-square {
+  border: 5px solid black; /* Change the background color to indicate latest square played */
+}
+
 .x-square {
   color: red; 
 }
