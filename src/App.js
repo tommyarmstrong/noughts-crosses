@@ -113,7 +113,7 @@ export default function Game() {
         <div className="game-content">
           <div className="game-board">
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-            <button onClick={restartGame}>Restart Game</button>
+            <button onClick={restartGame}>New Game</button>
 
           </div>
 
