@@ -85,16 +85,16 @@ export default function Game() {
   const moves = history.map((squares, move) => {
     let description;
     if (move > 0) {
-      description = "Go to Move " + move;
+      description = "Move " + move;
     } else {
-      description = "Go to Game Start";
+      description = "Game Start";
     }
 
     // Check if it's the current move
     if (move === currentMove) {
       return (
         <li key={move}>
-          <span>Move {move}</span>
+          <span>{description}</span>
         </li>
       );
     }
@@ -113,12 +113,10 @@ export default function Game() {
         <div className="game-content">
           <div className="game-board">
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-            <button onClick={restartGame}>New Game</button>
-
+            
           </div>
-
           <div className="game-info">
-            <button onClick={() => setShowMoves(!showMoves)}>
+            <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
                 {showMoves ? "Hide Moves" : "Show Moves"}
               </button>
               {showMoves && (
@@ -131,6 +129,9 @@ export default function Game() {
                 </ol>
               )}
           </div>
+        </div>
+        <div> 
+          <button className="big-button" onClick={restartGame}>New Game</button>
         </div>
       </div>
     </>

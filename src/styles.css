@@ -57,6 +57,20 @@ body {
   padding: 0;
 }
 
+.big-button {
+  background-color: blue;
+  border: none;
+  color: white;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 10px 2px;
+  cursor: pointer;
+  border-radius: 15px; 
+  }
+
 ol {
   list-style: none; /* Remove default numbering */
   padding: 0; /* Remove default padding */
@@ -94,7 +108,7 @@ ol li {
 }
 .game {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .game-info {
@@ -103,7 +117,7 @@ ol li {
 
 .game-content {
   display: flex;
-  flex-direction: row; /* Stack items vertically */
+  flex-direction: row; /* Stack items horizontally */
 }
 
 .winning-square {
@@ -117,6 +131,7 @@ ol li {
 .o-square {
   color: blue; 
 }
+
 
 /* Media query for mobile devices */
 @media (max-width: 768px) {
