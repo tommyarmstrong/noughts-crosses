@@ -193,12 +193,18 @@ function Competition() {
     }
   }
 
+  function resetScoreboard(result) {
+    setXWins(0);
+    setOWins(0);
+  }
+
   return (
     <>
       <div className="competition">
         <h1>Jack's Noughts & Crosses</h1>
         <Scoreboard xWins={xWins} oWins={oWins} />
         <Game updateScoreboard={updateScoreboard}/>
+        <button className="big-button" onClick={resetScoreboard}>Rest Scoreboard</button>
       </div>
     </>
   )
