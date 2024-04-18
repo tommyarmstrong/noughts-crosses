@@ -65,8 +65,15 @@ function Game({ updateScoreboard }) {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove ] = useState(0);
   const [showMoves, setShowMoves] = useState(false); 
-  const xIsNext = currentMove % 2 === 0;
+  const [startingPlayer, setStartingPlayer] = useState('X'); // Track the starting player
   const currentSquares = history[currentMove];
+
+  let xIsNext;
+  if (startingPlayer === 'X') {
+    xIsNext = currentMove % 2 === 0;
+  } else {
+    xIsNext = currentMove % 2 != 0;
+  }
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -82,6 +89,8 @@ function Game({ updateScoreboard }) {
     setHistory([Array(9).fill(null)]);
     setCurrentMove(0);
     setShowMoves(false);
+    // Toggle starting player between X and O
+    setStartingPlayer(startingPlayer === 'X' ? 'O' : 'X');
   }
 
   const moves = history.map((squares, move) => {
@@ -120,7 +129,7 @@ function Game({ updateScoreboard }) {
       <div className="game">
         <div className="game-content">
           <div className="game-board">
-            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} />
+            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} startingPlayer />
           </div>
           <div className="game-info">
             <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
