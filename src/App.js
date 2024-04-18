@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function Square({ value, onSquareClick, isWinning }) {
   return (
@@ -11,12 +11,16 @@ function Square({ value, onSquareClick, isWinning }) {
   );
 }
 
-function Board({ xIsNext, squares, onPlay }) {
+function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
+  const gameResult = calculateResult(squares).result;
+  const winningLine = calculateResult(squares).winningLine;
+
   function handleClick(i) {
     const nextSquares = squares.slice();
-    if(squares[i] || calculateResult(squares).result) {
+    if(squares[i] || gameResult) {          // If square already selected exit handleClick
       return;
-    }
+    } 
+
     if(xIsNext) { 
       nextSquares[i] = "X";
     } else {
@@ -25,8 +29,6 @@ function Board({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares);  
   }
 
-  const gameResult = calculateResult(squares).result;
-  const winningLine = calculateResult(squares).winningLine;
   let status;
   if(gameResult === "draw") {
     status = "Game Drawn";
@@ -59,7 +61,7 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
-export default function Game() {
+function Game({ updateScoreboard }) {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove ] = useState(0);
   const [showMoves, setShowMoves] = useState(false); 
@@ -76,7 +78,7 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
-  function restartGame() {
+  function newGame() {
     setHistory([Array(9).fill(null)]);
     setCurrentMove(0);
     setShowMoves(false);
@@ -106,13 +108,19 @@ export default function Game() {
     );
   });
 
+  useEffect(() => {
+    const result = calculateResult(currentSquares).result;
+    if (result && result !== "draw") {
+      updateScoreboard(result);
+    }
+  }, [currentSquares]);
+
   return (
     <>
-      <h1>Jack's Noughts & Crosses</h1>
       <div className="game">
         <div className="game-content">
           <div className="game-board">
-            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} />
           </div>
           <div className="game-info">
             <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
@@ -130,7 +138,7 @@ export default function Game() {
           </div>
         </div>
         <div> 
-          <button className="big-button" onClick={restartGame}>New Game</button>
+          <button className="big-button" onClick={newGame}>New Game</button>
         </div>
       </div>
     </>
@@ -157,10 +165,43 @@ function calculateResult(squares) {
   // If there is no winner and no empty (null) squares then result = draw
   const containsNull = squares.some(element => element === null);
   if (!containsNull) {
-    const result = "draw";
-    const winningLine = null;
     return { result: "draw", winningLine: null };
-    return "draw";
   }
   return { result: null, winningLine: null };
 }
+
+function Scoreboard({ xWins, oWins }) {
+  return (
+    <>
+      <div className="scoreboard">
+        <div>X Wins: {xWins}</div>
+        <div>O Wins: {oWins}</div>
+      </div>
+    </>
+  );
+}
+
+function Competition() {
+  const [xWins, setXWins] = useState(0);
+  const [oWins, setOWins] = useState(0);
+
+  function updateScoreboard(result) {
+    if (result === 'X') {
+      setXWins(prevWins => prevWins + 1);
+    } else if (result === 'O') {
+      setOWins(prevWins => prevWins + 1);
+    }
+  }
+
+  return (
+    <>
+      <div className="competition">
+        <h1>Jack's Noughts & Crosses</h1>
+        <Scoreboard xWins={xWins} oWins={oWins} />
+        <Game updateScoreboard={updateScoreboard}/>
+      </div>
+    </>
+  )
+}
+
+export default Competition;
