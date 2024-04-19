@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 function Square({ value, onSquareClick, isWinning }) {
+  // isWinning will be true if the square is part of a winning line - for CSS formatting purposes
   return (
     <button
       className={`square ${value === 'X' ? 'x-square' : 'o-square'} ${isWinning ? 'winning-square' :  ''}`}
@@ -16,31 +17,21 @@ function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
   const winningLine = calculateResult(squares).winningLine;
 
   function handleClick(i) {
-    const nextSquares = squares.slice();
-    if(squares[i] || gameResult) {          // If square already selected exit handleClick
+    const nextSquares = squares.slice();    // Create next squares so that squares in immutable
+    if(squares[i] || gameResult) {          // If square already has an X or O then exit handleClick()
       return;
     } 
 
     if(xIsNext) { 
-      nextSquares[i] = "X";
+      nextSquares[i] = "X";                 // Set value for the ith element in the nextSquares array
     } else {
       nextSquares[i] = "O";
     }
-    onPlay(nextSquares);  
-  }
-
-  let status;
-  if(gameResult === "draw") {
-    status = "Game Drawn";
-  } else if (gameResult) {
-    status = "Winner: " + gameResult;
-  } else {
-    status = "Next Player: " + (xIsNext ? "X" : "O");
+    onPlay(nextSquares);                    // Call the passed down function 
   }
 
   return (
     <>
-      <div className="status">{status}</div>
       {Array(3).fill(null).map((_, rowIndex) => (
         <div className="board-row" key={rowIndex}>
           {Array(3).fill(null).map((_, colIndex) => {
@@ -61,7 +52,7 @@ function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
   );
 }
 
-function Game({ updateScoreboard }) {
+function Game({ updateScoreboard, resetScoreboard, passStatus }) {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove ] = useState(0);
   const [showMoves, setShowMoves] = useState(false); 
@@ -98,22 +89,22 @@ function Game({ updateScoreboard }) {
     if (move > 0) {
       description = "Move " + move;
     } else {
-      description = "Game Start";
+      description = "Start";
     }
 
     // Check if it's the current move
     if (move === currentMove) {
       return (
-        <li key={move}>
-          <span>{description}</span>
-        </li>
+        <div key={move} className="move-text">
+          {description}
+        </div>
       );
     }
 
     return (
-      <li key={move}>
+      <div key={move} className="move-button">
         <button onClick={() => jumpTo(move)}>{description}</button>
-      </li>
+      </div>
     );
   });
 
@@ -124,6 +115,16 @@ function Game({ updateScoreboard }) {
     }
   }, [currentSquares]);
 
+    // Calculate the status
+    let status;
+    if (calculateResult(currentSquares).result === "draw") {
+      status = "Draw";
+    } else if (calculateResult(currentSquares).result) {
+      status = calculateResult(currentSquares).result + " wins the game";
+    } else {
+      status = "Next Move: " + (xIsNext ? "X" : "O");
+    }
+
   return (
     <>
       <div className="game">
@@ -132,22 +133,25 @@ function Game({ updateScoreboard }) {
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} startingPlayer />
           </div>
           <div className="game-info">
-            <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
+            <div className="game-control"> 
+              <button className="big-button" onClick={newGame}>New Game</button>
+              <button className="big-button" onClick={resetScoreboard}>Reset Scores</button>
+            </div>
+            <div className="game-moves">
+              <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
                 {showMoves ? "Hide Moves" : "Show Moves"}
               </button>
               {showMoves && (
-                <ol style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                <div className="moves-buttons-content">
                   {moves.map((move, index) => (
-                    <li key={index} style={{ marginBottom: '5px' }}>
+                    <div key={index}>
                       {move}
-                    </li>
+                    </div>
                   ))}
-                </ol>
+                </div>
               )}
+            </div>
           </div>
-        </div>
-        <div> 
-          <button className="big-button" onClick={newGame}>New Game</button>
         </div>
       </div>
     </>
@@ -179,12 +183,14 @@ function calculateResult(squares) {
   return { result: null, winningLine: null };
 }
 
-function Scoreboard({ xWins, oWins }) {
+function Scoreboard({ xWins, oWins, status }) {
+  // NEED TO DISPLAY THE STATUS IN THE SCOREBOARD
   return (
     <>
       <div className="scoreboard">
-        <div>X Wins: {xWins}</div>
-        <div>O Wins: {oWins}</div>
+        <div><b>Scoreboard</b></div>
+        <div>X wins: {xWins}</div>
+        <div>O wins: {oWins}</div>
       </div>
     </>
   );
@@ -193,6 +199,7 @@ function Scoreboard({ xWins, oWins }) {
 function Competition() {
   const [xWins, setXWins] = useState(0);
   const [oWins, setOWins] = useState(0);
+  const [status, setStatus] = useState("Temp");
 
   function updateScoreboard(result) {
     if (result === 'X') {
@@ -202,7 +209,7 @@ function Competition() {
     }
   }
 
-  function resetScoreboard(result) {
+  function resetScoreboard() {
     setXWins(0);
     setOWins(0);
   }
@@ -210,10 +217,9 @@ function Competition() {
   return (
     <>
       <div className="competition">
-        <h1>Jack's Noughts & Crosses</h1>
-        <Scoreboard xWins={xWins} oWins={oWins} />
-        <Game updateScoreboard={updateScoreboard}/>
-        <button className="big-button" onClick={resetScoreboard}>Rest Scoreboard</button>
+        <h1>Jack's XOXO</h1>
+        <Scoreboard xWins={xWins} oWins={oWins} status={status} />
+        <Game updateScoreboard={updateScoreboard} resetScoreboard={resetScoreboard} passStatus={setStatus}/>
       </div>
     </>
   )
