@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/noughts-crosses/static/css/main.ec307e31.css",
-    "main.js": "/noughts-crosses/static/js/main.ab7b7195.js",
+    "main.css": "/noughts-crosses/static/css/main.f04198eb.css",
+    "main.js": "/noughts-crosses/static/js/main.61b8474f.js",
     "index.html": "/noughts-crosses/index.html",
-    "main.ec307e31.css.map": "/noughts-crosses/static/css/main.ec307e31.css.map",
-    "main.ab7b7195.js.map": "/noughts-crosses/static/js/main.ab7b7195.js.map"
+    "main.f04198eb.css.map": "/noughts-crosses/static/css/main.f04198eb.css.map",
+    "main.61b8474f.js.map": "/noughts-crosses/static/js/main.61b8474f.js.map"
   },
   "entrypoints": [
-    "static/css/main.ec307e31.css",
-    "static/js/main.ab7b7195.js"
+    "static/css/main.f04198eb.css",
+    "static/js/main.61b8474f.js"
   ]
 }
