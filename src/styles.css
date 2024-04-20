@@ -106,12 +106,9 @@ ol li {
   display: table;
 }
 
-.status {
+.game-status {
+  margin-left: 10px;
   margin-bottom: 10px;
-}
-.game {
-  display: flex;
-  flex-direction: row; 
 }
 
 .game-content {
@@ -119,14 +116,8 @@ ol li {
   flex-direction: row; /* Stack items horizontally */
 }
 
-.game-board {
-}
-
 .game-info {
   margin-left: 20px;
-}
-
-.game-control {
 }
 
 .game-moves {

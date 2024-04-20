@@ -128,6 +128,7 @@ function Game({ updateScoreboard, resetScoreboard, passStatus }) {
   return (
     <>
       <div className="game">
+        <div className="game-status">{status}</div>
         <div className="game-content">
           <div className="game-board">
             <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} startingPlayer />
