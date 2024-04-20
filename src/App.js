@@ -139,7 +139,7 @@ function Game({ updateScoreboard, resetScoreboard, passStatus }) {
             </div>
             <div className="game-moves">
               <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
-                {showMoves ? "Hide Moves" : "Show Moves"}
+                {showMoves ? "Time Machine - Hide" : "Time Machine - Show"}
               </button>
               {showMoves && (
                 <div className="moves-buttons-content">
