@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 
-function Square({ value, onSquareClick, isWinning }) {
+function Square({ value, onSquareClick, isWinning, isLatestMove }) {
   // isWinning will be true if the square is part of a winning line - for CSS formatting purposes
   return (
     <button
-      className={`square ${value === 'X' ? 'x-square' : 'o-square'} ${isWinning ? 'winning-square' :  ''}`}
+      className={`square ${value === 'X' ? 'x-square' : 'o-square'} ${isWinning ? 'winning-square' : ''} ${isLatestMove ? 'latest-move' : ''}`}
       onClick={onSquareClick}
     >
       {value}
@@ -12,7 +12,7 @@ function Square({ value, onSquareClick, isWinning }) {
   );
 }
 
-function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
+function Board({ xIsNext, squares, onPlay, lastMoveIndex }) {
   const gameResult = calculateResult(squares).result;
   const winningLine = calculateResult(squares).winningLine;
 
@@ -37,12 +37,14 @@ function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
           {Array(3).fill(null).map((_, colIndex) => {           // With three empty columns
             const squareIndex = rowIndex * 3 + colIndex;        // Index the squares 0 to 8
             const isWinning = winningLine && winningLine.includes(squareIndex);     // Winning square if index is in winningLine
+            const isLatestMove = squareIndex === lastMoveIndex;
             return (
               <Square                                           // Call Square function
                 key={squareIndex}
                 value={squares[squareIndex]}
                 onSquareClick={() => handleClick(squareIndex)}
                 isWinning={isWinning}
+                isLatestMove={isLatestMove}
               />
             );
           })}
@@ -113,15 +115,29 @@ function Game({ updateScoreboard, resetScoreboard }) {                // Pass do
     }
   }, [currentSquares]);
 
-    // Calculate the status
-    let status;
-    if (calculateResult(currentSquares).result === "draw") {
-      status = "Draw";
-    } else if (calculateResult(currentSquares).result) {
-      status = calculateResult(currentSquares).result + " WINS THIS GAME";
-    } else {
-      status = "Next Move: " + (xIsNext ? "X" : "O");
+  // Calculate the status
+  let status;
+  if (calculateResult(currentSquares).result === "draw") {
+    status = "Draw";
+  } else if (calculateResult(currentSquares).result) {
+    status = calculateResult(currentSquares).result + " WINS THIS GAME";
+  } else {
+    status = "Next Move: " + (xIsNext ? "X" : "O");
+  }
+
+  function sumIndices(array) {                          // Return the index of the last move in the history
+    let indexSum = 0;
+    if (array !== undefined) {
+      for (let i = 0; i < array.length; i++) {
+        if (array[i] !== null && array[i] !== undefined) {
+          indexSum += i;
+        }
+      }
+      return indexSum
     }
+  }
+  // The lastMoveIndex will be passed down to Board and then to Square so it can be styled by CSS 
+  let lastMoveIndex = sumIndices(history[history.length - 1]) - sumIndices(history[history.length - 2])
 
   // Render the Game content. First the Board and then the game control buttons and the time machine
   return (
@@ -130,7 +146,7 @@ function Game({ updateScoreboard, resetScoreboard }) {                // Pass do
         <div className="game-status">{status}</div>
         <div className="game-content">
           <div className="game-board">
-            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} startingPlayer />
+            <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} updateScoreboard={updateScoreboard} startingPlayer lastMoveIndex={lastMoveIndex}/>
           </div>
           <div className="game-info">
             <div className="game-control"> 
