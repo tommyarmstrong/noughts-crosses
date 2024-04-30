@@ -52,7 +52,7 @@ function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
   );
 }
 
-function Game({ updateScoreboard, resetScoreboard, passStatus }) {
+function Game({ updateScoreboard, resetScoreboard }) {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove ] = useState(0);
   const [showMoves, setShowMoves] = useState(false); 
@@ -200,7 +200,6 @@ function Scoreboard({ xWins, oWins, status }) {
 function Competition() {
   const [xWins, setXWins] = useState(0);
   const [oWins, setOWins] = useState(0);
-  const [status, setStatus] = useState("Temp");
 
   function updateScoreboard(result) {
     if (result === 'X') {
@@ -219,8 +218,8 @@ function Competition() {
     <>
       <div className="competition">
         <h1>Jack's XOXO</h1>
-        <Scoreboard xWins={xWins} oWins={oWins} status={status} />
-        <Game updateScoreboard={updateScoreboard} resetScoreboard={resetScoreboard} passStatus={setStatus}/>
+        <Scoreboard xWins={xWins} oWins={oWins} />
+        <Game updateScoreboard={updateScoreboard} resetScoreboard={resetScoreboard} />
       </div>
     </>
   )
