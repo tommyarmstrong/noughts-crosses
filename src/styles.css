@@ -72,26 +72,13 @@ body {
   border-radius: 0px; 
   }
 
-ol {
-  list-style: none; /* Remove default numbering */
-  padding: 0; /* Remove default padding */
-  margin: 0; /* Remove default margin */
-}
-
-ol li {
-  margin-bottom: 5px; /* Add some spacing between moves */
-}
-
 .square {
   background: #fff;
   border: 1px solid #999;
   float: left;
-  /* height: 200px;
-  width: 200px;
-  font-size: 170px;  */
-  height: 90px;
-  width: 90px;
-  font-size: 85px;
+  height: 13vw;
+  width: 13vw;
+  font-size: 170px; 
   font-weight: bold;
   line-height: 34px;
   margin-right: -1px;
@@ -107,14 +94,14 @@ ol li {
 }
 
 .scoreboard {
-  width: 267px;
+  width: 39vw;
   padding: 10px;
   background-color: black; 
   color: white;
 }
 
 .game-status {
-  width: 267px;
+  width: 39vw;
   padding: 10px;
   background-color: black; 
   color: white;
