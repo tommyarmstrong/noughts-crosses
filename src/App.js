@@ -120,7 +120,7 @@ function Game({ updateScoreboard, resetScoreboard }) {
     if (calculateResult(currentSquares).result === "draw") {
       status = "Draw";
     } else if (calculateResult(currentSquares).result) {
-      status = calculateResult(currentSquares).result + " wins the game";
+      status = calculateResult(currentSquares).result + " WINS THE GAME";
     } else {
       status = "Next Move: " + (xIsNext ? "X" : "O");
     }
@@ -139,9 +139,11 @@ function Game({ updateScoreboard, resetScoreboard }) {
               <button className="big-button" onClick={resetScoreboard}>Reset Scores</button>
             </div>
             <div className="game-moves">
-              <button className="big-button" onClick={() => setShowMoves(!showMoves)}>
-                {showMoves ? "Time Machine - Hide" : "Time Machine - Show"}
-              </button>
+            Time Machine
+              <label className="toggle-switch">
+                <input type="checkbox" checked={showMoves} onChange={() => setShowMoves(!showMoves)} />
+                <span className="slider round"></span>
+              </label>
               {showMoves && (
                 <div className="moves-buttons-content">
                   {moves.map((move, index) => (
@@ -189,7 +191,7 @@ function Scoreboard({ xWins, oWins }) {
     <>
       <div className="scoreboard">
         <div><b>===SCOREBOARD===</b></div>
-        <div>X wins: {xWins}...&nbsp;&nbsp;&nbsp;O wins: {oWins}...</div>
+        <div>X wins: {xWins}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O wins: {oWins}</div>
       </div>
     </>
   );
