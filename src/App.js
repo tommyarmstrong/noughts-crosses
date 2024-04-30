@@ -17,28 +17,28 @@ function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
   const winningLine = calculateResult(squares).winningLine;
 
   function handleClick(i) {
-    const nextSquares = squares.slice();    // Create next squares so that squares in immutable
+    const nextSquares = squares.slice();    // Create nextSquares so that squares is immutable
     if(squares[i] || gameResult) {          // If square already has an X or O then exit handleClick()
       return;
     } 
 
-    if(xIsNext) { 
+    if(xIsNext) {                           // Is X the next move
       nextSquares[i] = "X";                 // Set value for the ith element in the nextSquares array
     } else {
       nextSquares[i] = "O";
     }
-    onPlay(nextSquares);                    // Call the passed down function 
+    onPlay(nextSquares);                    // Call the passed down function onPlay passing the nextSquares array
   }
 
   return (
     <>
-      {Array(3).fill(null).map((_, rowIndex) => (
+      {Array(3).fill(null).map((_, rowIndex) => (               // Three empty rows
         <div className="board-row" key={rowIndex}>
-          {Array(3).fill(null).map((_, colIndex) => {
-            const squareIndex = rowIndex * 3 + colIndex;
-            const isWinning = winningLine && winningLine.includes(squareIndex);
+          {Array(3).fill(null).map((_, colIndex) => {           // With three empty columns
+            const squareIndex = rowIndex * 3 + colIndex;        // Index the squares 0 to 8
+            const isWinning = winningLine && winningLine.includes(squareIndex);     // Winning square if index is in winningLine
             return (
-              <Square 
+              <Square                                           // Call Square function
                 key={squareIndex}
                 value={squares[squareIndex]}
                 onSquareClick={() => handleClick(squareIndex)}
@@ -52,36 +52,35 @@ function Board({ xIsNext, squares, onPlay, updateScoreboard }) {
   );
 }
 
-function Game({ updateScoreboard, resetScoreboard }) {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [currentMove, setCurrentMove ] = useState(0);
-  const [showMoves, setShowMoves] = useState(false); 
-  const [startingPlayer, setStartingPlayer] = useState('X'); // Track the starting player
-  const currentSquares = history[currentMove];
+function Game({ updateScoreboard, resetScoreboard }) {                // Pass down functions to modify the overall Scoreboard
+  const [history, setHistory] = useState([Array(9).fill(null)]);      // History of moves will enable "time machine"
+  const [currentMove, setCurrentMove ] = useState(0);                 // Keep track od the current move
+  const [showMoves, setShowMoves] = useState(false);                  // Toggle whether moves should be displayed
+  const [startingPlayer, setStartingPlayer] = useState('X');          // Track the starting player
+  const currentSquares = history[currentMove];                        // Current state of Game is the latest array in history
 
   let xIsNext;
-  if (startingPlayer === 'X') {
-    xIsNext = currentMove % 2 === 0;
-  } else {
-    xIsNext = currentMove % 2 != 0;
+  if (startingPlayer === 'X') {                                       // If X starts the game then xISNext is true for even moves
+    xIsNext = currentMove % 2 === 0;                                  // 0, 2, 4, 6, 8
+  } else {                                                            // and false for odd moves 1, 3, 5, 7
+    xIsNext = currentMove % 2 != 0;                                   // 
   }
 
-  function handlePlay(nextSquares) {
+  function handlePlay(nextSquares) {                                  // Function that will be passed down to the Board
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
-    setCurrentMove(nextHistory.length - 1);
+    setHistory(nextHistory);                                          // This will allow thr Board to update the history array with 
+    setCurrentMove(nextHistory.length - 1);                           // ...the latest squares and set current move from the history array
   }
 
-  function jumpTo(nextMove) {
-    setCurrentMove(nextMove);
+  function jumpTo(nextMove) {                                 // Function for when a moves button is selected
+    setCurrentMove(nextMove);                                 
   }
 
-  function newGame() {
-    setHistory([Array(9).fill(null)]);
-    setCurrentMove(0);
-    setShowMoves(false);
-    // Toggle starting player between X and O
-    setStartingPlayer(startingPlayer === 'X' ? 'O' : 'X');
+  function newGame() {                                        // What to do when the New Game button is pressed
+    setHistory([Array(9).fill(null)]);                        // Reset history array to nulls
+    setCurrentMove(0);                                        // Current move back to zero
+    setShowMoves(false);                                      // Turn off the time machine
+    setStartingPlayer(startingPlayer === 'X' ? 'O' : 'X');    // Toggle starting player between X and O
   }
 
   const moves = history.map((squares, move) => {
@@ -92,10 +91,9 @@ function Game({ updateScoreboard, resetScoreboard }) {
       description = "Start";
     }
 
-    // Check if it's the current move
-    if (move === currentMove) {
-      return (
-        <div key={move} className="move-text">
+    if (move === currentMove) {                         // Render content for the moves buttons
+      return (                                              
+        <div key={move} className="move-text">            
           {description}
         </div>
       );
@@ -120,11 +118,12 @@ function Game({ updateScoreboard, resetScoreboard }) {
     if (calculateResult(currentSquares).result === "draw") {
       status = "Draw";
     } else if (calculateResult(currentSquares).result) {
-      status = calculateResult(currentSquares).result + " WINS THE GAME";
+      status = calculateResult(currentSquares).result + " WINS THIS GAME";
     } else {
       status = "Next Move: " + (xIsNext ? "X" : "O");
     }
 
+  // Render the Game content. First the Board and then the game control buttons and the time machine
   return (
     <>
       <div className="game">
@@ -161,8 +160,8 @@ function Game({ updateScoreboard, resetScoreboard }) {
   );
 }
 
-function calculateResult(squares) {
-  const lines = [
+function calculateResult(squares) {              
+  const lines = [                  // The winning straight lines: 3x horizontal, 3x vertical and 2x diagonal
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -172,7 +171,7 @@ function calculateResult(squares) {
     [0, 4, 8],
     [2, 4, 6]
   ];
-  for (let i = 0; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {      // Calculate if there is a winning line
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return { result: squares[a], winningLine: lines[i] };
@@ -186,7 +185,7 @@ function calculateResult(squares) {
   return { result: null, winningLine: null };
 }
 
-function Scoreboard({ xWins, oWins }) {
+function Scoreboard({ xWins, oWins }) {           // Render the Scoreboard content
   return (
     <>
       <div className="scoreboard">
@@ -197,11 +196,11 @@ function Scoreboard({ xWins, oWins }) {
   );
 }
 
-function Competition() {
-  const [xWins, setXWins] = useState(0);
+function Competition() {                          // Competition spans multiple games
+  const [xWins, setXWins] = useState(0);          // Start scores at nill-nill
   const [oWins, setOWins] = useState(0);
 
-  function updateScoreboard(result) {
+  function updateScoreboard(result) {             // Every time a result happens update the scoreboard with the result
     if (result === 'X') {
       setXWins(prevWins => prevWins + 1);
     } else if (result === 'O') {
@@ -209,11 +208,13 @@ function Competition() {
     }
   }
 
-  function resetScoreboard() {
+  function resetScoreboard() {                    // Function to reset the overall scoreboard back to nil-nil
     setXWins(0);
     setOWins(0);
   }
 
+  // Render the overall content. First a heading, then the scoreboard and then the Game (with includes 
+  // the Board, the contolr buttons abnd the time machine).
   return (
     <>
       <div className="competition">
@@ -225,4 +226,4 @@ function Competition() {
   )
 }
 
-export default Competition;
+export default Competition;                       // Call competition as the default function and starting point
