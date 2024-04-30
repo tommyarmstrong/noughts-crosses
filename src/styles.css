@@ -145,7 +145,7 @@ body {
 }
 
 .latest-move {
-  border: 1px solid black; /* Change the background color to indicate latest square played */
+  border: 2px solid black; /* Change the background color to indicate latest square played */
 }
 
 .x-square {

@@ -125,7 +125,7 @@ function Game({ updateScoreboard, resetScoreboard }) {                // Pass do
     status = "Next Move: " + (xIsNext ? "X" : "O");
   }
 
-  function sumIndices(array) {                          // Return the index of the last move in the history
+  function sumIndices(array) {                          // Return the summ of indices for an arrayy
     let indexSum = 0;
     if (array !== undefined) {
       for (let i = 0; i < array.length; i++) {
@@ -136,8 +136,9 @@ function Game({ updateScoreboard, resetScoreboard }) {                // Pass do
       return indexSum
     }
   }
-  // The lastMoveIndex will be passed down to Board and then to Square so it can be styled by CSS 
-  let lastMoveIndex = sumIndices(history[history.length - 1]) - sumIndices(history[history.length - 2])
+  // Sum indices in history of the current move and subtract sum of indices in the previous move
+  // This will be passed down to Board and then to Square so it can be styled by CSS 
+  let lastMoveIndex = sumIndices(history[currentMove]) - sumIndices(history[currentMove - 1])
 
   // Render the Game content. First the Board and then the game control buttons and the time machine
   return (
