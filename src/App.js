@@ -184,14 +184,12 @@ function calculateResult(squares) {
   return { result: null, winningLine: null };
 }
 
-function Scoreboard({ xWins, oWins, status }) {
-  // NEED TO DISPLAY THE STATUS IN THE SCOREBOARD
+function Scoreboard({ xWins, oWins }) {
   return (
     <>
       <div className="scoreboard">
-        <div><b>Scoreboard</b></div>
-        <div>X wins: {xWins}</div>
-        <div>O wins: {oWins}</div>
+        <div><b>===SCOREBOARD===</b></div>
+        <div>X wins: {xWins}...&nbsp;&nbsp;&nbsp;O wins: {oWins}...</div>
       </div>
     </>
   );
@@ -220,7 +218,7 @@ function Competition() {
         <h1>Jack's XOXO</h1>
         <Scoreboard xWins={xWins} oWins={oWins} />
         <Game updateScoreboard={updateScoreboard} resetScoreboard={resetScoreboard} />
-      </div>
+        </div>
     </>
   )
 }
