@@ -188,7 +188,7 @@ function Scoreboard({ xWins, oWins }) {
   return (
     <>
       <div className="scoreboard">
-        <div><b>SCOREBOARD</b></div>
+        <div><b>===SCOREBOARD===</b></div>
         <div>X wins: {xWins}...&nbsp;&nbsp;&nbsp;O wins: {oWins}...</div>
       </div>
     </>
