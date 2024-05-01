@@ -235,7 +235,6 @@ function Competition() {                          // Competition spans multiple 
   return (
     <>
       <div className="competition">
-        <h1>Jack's XOXO</h1>
         <Scoreboard xWins={xWins} oWins={oWins} />
         <Game updateScoreboard={updateScoreboard} resetScoreboard={resetScoreboard} />
         </div>
